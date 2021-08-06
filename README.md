@@ -1,2 +1,2 @@
 # SMBH
-Super Massive Balck Hole mass
+Super Massive Black Hole mass
