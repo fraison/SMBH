@@ -2,22 +2,18 @@
 
 Project "Super Massive Black Hole mass" (SMBH) is intended to assess if the mass of a SMBH can be estimated from spectral velocity distributions data cubes with a convolutional neural network. 
 
-**Table of Contents**
 
-
-[TOC]
-
-#H1 Requirements
+# Requirements
 
 - 'PYthon Gaussian ModElling - Python MGE Tool' (PYGME) version 0.0.4, from Eric Emsellem at ESO; only needed to simulate the data sets.
 - Keras (from TensorFlow); only needed to train the convolutional neural network (CNN)
 - Python (here version 3.6.10 was used).
 
-#H1 Usage of ***demonstrator_1***
+# Usage of ***demonstrator_1***
 
-#H2 In a nutshell
+## In a nutshell
 
-#H3 Data generation
+### Data generation
 
 In ***notebooks***, 
 - **"pygme_check.ipynb"** is a short tutorial which explains how to use the package pygme to build a self-consistent model with particles.
@@ -27,21 +23,21 @@ In ***src***, **"data_generator.py"** is the python code to use in order to gene
 
 Two small same sized data sets are already available in ***data*** for training in ***trainData_1*** and  ***trainData_2*** and for testing in respectively ***testData_1*** and  ***testData_2***.
 
-#H3 Model training
+### Model training
 
 Some models **"model_03.hdf5"** and **"model2_01.hdf5"** have been saved in ***models*** after training respectively using data sets ***trainData_1*** and  ***trainData_2***.
 
 Nevertheless, in ***pipeline***, **"Trainer.py"** can be used to train the CNN with a data set and generate new models.
 
-#H3 Model use
+### Model use
 
-In ***pipeline**, **"Analysis.py"** calculates the performances of a model with a test data set. And **"Service.py"** performs the inference of a SMBH mass for a specific data cube based on a model. 
+In ***pipeline***, **"Analysis.py"** calculates the performances of a model with a test data set. And **"Service.py"** performs the inference of a SMBH mass for a specific data cube based on a model. 
 
-#H2 In details
+## In details
 
 In ***notebooks***, **"data_inspector.ipynb"** helps to visualize the data cubes (projection to (x,y) along velocity axis z).
 
-
+```
 
 ├── analysis.txt
 ├── demonstrator_1
@@ -91,13 +87,14 @@ In ***notebooks***, **"data_inspector.ipynb"** helps to visualize the data cubes
 │       ├── data_generator_test.py       - test of data_generator.py 
 ├── LICENSE
 └── README.md
+```
 
-#H1 Future Work
+# Future Work
 
 - Deploy "Service.py". 
 - Provide better models based on larger data sets.
 - Use more parameters in data generation and regression as output of CNN.
 
-#H1 Acknowledgments
+# Acknowledgments
 
 My gratitude to Eric Emsellem (ESO) and Jens Thomas (MPE) for their help. 
