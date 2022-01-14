@@ -283,7 +283,56 @@ class params1():
         
         # function used to sample the galxy radius [pc]
         self.fun = funSamplingOriginal
-            
+  
+  
+  
+
+# test 1: compare old settings with example
+class train1(params1):   
+    def __init__(self):
+        """    
+        Function generating the dataset from parameter sets
+
+        """
+        params1.__init__(self)        
+        
+        # HARD PARAMETERS (set for one data set)
+
+        # constant to dimensionate MBH ; Mgal ~ delta * Re**2 (@luminosity =100)
+        self.delta = 12.98
+        
+
+        # SOFT PARAMETERS (explore the parameter space in each data set)    
+             
+        # factor relating the black hole mass and the total galaxy mass
+        #self.gamma = np.array([0.,0.2])[int(task):int(task)+1] #1 value here   
+        self.gamma = np.linspace(0,10,100)/100. # 10 % of galaxy mass at max
+  
+
+class test1(params1):   
+    def __init__(self):
+        """    
+        Function generating the dataset from parameter sets
+
+        """
+        params1.__init__(self)
+        
+        # HARD PARAMETERS (set for one data set)
+
+        # constant to dimensionate MBH ; Mgal ~ delta * Re**2 (@luminosity =100)
+        self.delta = 12.98 
+
+        # SOFT PARAMETERS (explore the parameter space in each data set)    
+     
+        # factor relating the black hole mass and the total galaxy mass
+        #self.gamma = np.array([0.,0.2])[int(task):int(task)+1] #1 value here     
+        self.gamma = np.linspace(0.05,10,10)[:-1]/100. #10% max
+
+          
+
+  
+ 
+# test2: check if realistic parameters can train a network            
 class params2():   
     def __init__(self):
         """    
@@ -294,13 +343,13 @@ class params2():
         self.nstars = 10000 #number of stars in each galaxy; 1M would be ideal
 
         ## Number of points in the Velocity direction
-        self.nv = 101
+        self.nv = 29
 
-        self.maxV = 1000. #in [km/s], maximum velocity for the LOSVDs
+        self.maxV = 1036. #in [km/s], maximum velocity for the LOSVDs
     
         ## Number of point in the X and Y direction (the total number will be nXY * nXY)
         ## You can also specify a tupple for different numbers in X and Y    
-        self.nXY = 101    
+        self.nXY = 100   
         
         #number of values along axes perpendicular to LOS
         self.imageSize= 20 #
@@ -309,18 +358,18 @@ class params2():
         self.imageDepth= self.nv - 1
 
         # constant to dimensionate MBH ; Mgal ~ delta * Re**2 (@luminosity =100)
-        self.delta = 12.97
+        self.delta = 896.7
 
         # SOFT PARAMETERS (explore the parameter space in each data set)    
         #  Effective radius of Sersic profile in [pc]
         self.Re = np.array([ 1500.])
    
         # distance of the galaxy in [Mpc]
-        self.dist = 10 #Mpc
+        self.dist = 222.9 #Mpc
 
         # Let's add some axis ratio - here let's decide it is b/a= 0.55 (ellipticity is 1-b/a = 0.45)
         # axis_ratio : b/a where b is the small axis along z and a in the plan xy perpendicular to z (z = symmetry axis)
-        self.axis_ratio = np.array([0.8])
+        self.axis_ratio = np.array([0.55])
    
         # parameter relating Sersic parameter beta to ellipticity beta = epsilon * FBEps
         self.FBEps = np.array([0.6]) 
@@ -329,7 +378,7 @@ class params2():
         self.alpha = np.array([0.])
 
         # radius inside which LOSVD is calculated [pc]
-        self.scaleR = 5000.0
+        self.scaleR = 21607.0
         
         # here we do 1 check: use only a single vector of parameters 
         # [0-100] Galaxy mass = factor_luminosity * galaxy luminosity
@@ -339,168 +388,60 @@ class params2():
         task = 0 #only 1 process in use here
      
         # factor relating the black hole mass and the total galaxy mass
-        self.gamma = np.array([0.1,0.2])[int(task):int(task)+1] #1 value here     
+        self.gamma = np.array([0.,0.2])[int(task):int(task)+1] #1 value here     
         
-        # function used to sample the galxy radius [pc]
+        # function used to sample the galaxy radius [pc]
         self.fun = funSamplingOriginal
+        
 
 # test 1: compare old settings with example
-class train1():   
+class train2(params2):   
     def __init__(self):
         """    
         Function generating the dataset from parameter sets
 
         """
+        params2.__init__(self)
         
         # HARD PARAMETERS (set for one data set)
-        self.nstars = 10000 #number of stars in each galaxy; 1M would be ideal
-
-        ## Number of points in the Velocity direction
-        self.nv = 101
-
-        self.maxV = 1000. #in [km/s], maximum velocity for the LOSVDs
-    
-        ## Number of point in the X and Y direction (the total number will be nXY * nXY)
-        ## You can also specify a tupple for different numbers in X and Y    
-        self.nXY = 101    
-        
-        #number of values along axes perpendicular to LOS
-        self.imageSize= 20 #
-       
-        #number of values along velocity axis
-        self.imageDepth= self.nv - 1
 
         # constant to dimensionate MBH ; Mgal ~ delta * Re**2 (@luminosity =100)
         self.delta = 12.98
+        
 
         # SOFT PARAMETERS (explore the parameter space in each data set)    
-        #  Effective radius of Sersic profile in [pc]
-        self.Re = np.array([ 1500.])
-   
-        # distance of the galaxy in [Mpc]
-        self.dist = 10 #Mpc
-
-        # Let's add some axis ratio - here let's decide it is b/a= 0.55 (ellipticity is 1-b/a = 0.45)
-        # axis_ratio : b/a where b is the small axis along z and a in the plan xy perpendicular to z (z = symmetry axis)
-        self.axis_ratio = np.array([0.8])
-   
-        # parameter relating Sersic parameter beta to ellipticity beta = epsilon * FBEps
-        self.FBEps = np.array([0.6]) 
-
-        # angle of rotation of the system to perform data augmentation without increasing CPU time significantly
-        self.alpha = np.array([0.])
-
-        # radius inside which LOSVD is calculated [pc]
-        self.scaleR = 5000.0
-        
-        # here we do 1 check: use only a single vector of parameters 
-        # [0-100] Galaxy mass = factor_luminosity * galaxy luminosity
-        self.factor_luminosity = np.array([100.])
-     
-        # task is just a convenient index to distribute parameters to each process running on a specific node
-        task = 0 #only 1 process in use here
-     
+             
         # factor relating the black hole mass and the total galaxy mass
         #self.gamma = np.array([0.,0.2])[int(task):int(task)+1] #1 value here   
         self.gamma = np.linspace(0,10,100)/100. # 10 % of galaxy mass at max
   
-        
-        # function used to sample the galxy radius [pc]
-        self.fun = funSamplingOriginal
 
-class test1():   
+class test2(params2):   
     def __init__(self):
         """    
         Function generating the dataset from parameter sets
 
-        """
+        """        
+        params2.__init__(self)
         
         # HARD PARAMETERS (set for one data set)
-        self.nstars = 10000 #number of stars in each galaxy; 1M would be ideal
-
-        ## Number of points in the Velocity direction
-        self.nv = 101
-
-        self.maxV = 1000. #in [km/s], maximum velocity for the LOSVDs
-    
-        ## Number of point in the X and Y direction (the total number will be nXY * nXY)
-        ## You can also specify a tupple for different numbers in X and Y    
-        self.nXY = 101    
-        
-        #number of values along axes perpendicular to LOS
-        self.imageSize= 20 #
-       
-        #number of values along velocity axis
-        self.imageDepth= self.nv - 1
 
         # constant to dimensionate MBH ; Mgal ~ delta * Re**2 (@luminosity =100)
         self.delta = 12.98 
 
         # SOFT PARAMETERS (explore the parameter space in each data set)    
-        #  Effective radius of Sersic profile in [pc]
-        self.Re = np.array([ 1500.])
-   
-        # distance of the galaxy in [Mpc]
-        self.dist = 10 #Mpc
-
-        # Let's add some axis ratio - here let's decide it is b/a= 0.55 (ellipticity is 1-b/a = 0.45)
-        # axis_ratio : b/a where b is the small axis along z and a in the plan xy perpendicular to z (z = symmetry axis)
-        self.axis_ratio = np.array([0.8])
-   
-        # parameter relating Sersic parameter beta to ellipticity beta = epsilon * FBEps
-        self.FBEps = np.array([0.6]) 
-
-        # angle of rotation of the system to perform data augmentation without increasing CPU time significantly
-        self.alpha = np.array([0.])
-
-        # radius inside which LOSVD is calculated [pc]
-        self.scaleR = 5000.0
-        
-        # here we do 1 check: use only a single vector of parameters 
-        # [0-100] Galaxy mass = factor_luminosity * galaxy luminosity
-        self.factor_luminosity = np.array([100.])
-     
-        # task is just a convenient index to distribute parameters to each process running on a specific node
-        task = 0 #only 1 process in use here
      
         # factor relating the black hole mass and the total galaxy mass
         #self.gamma = np.array([0.,0.2])[int(task):int(task)+1] #1 value here     
         self.gamma = np.linspace(0.05,10,10)[:-1]/100. #10% max
+        
 
-        # function used to sample the galaxy radius [pc]
-        self.fun = funSamplingOriginal            
+def buildSet(path , paramType):
 
-  
- 
-def buildTest_1():
-    
-    # test 1:
-    p1 = test1()
-    Xc, X3Dxc ,Yc = GenImagesRe(p1)
+    Xc, X3Dxc ,Yc = GenImagesRe(paramType)
     
     # save results
     logger.info("save results")
-    path = "../data/testData_1/"
- 
-    task = 0
-    XFileName = path+"Xc_"+str(task)
-    X3DxrFileName = path+"X3Dc_"+str(task)
-    yFileName = path+"Yc_"+str(task)
-
-    np.save(yFileName, Yc)
-    np.save(XFileName, Xc)
-    np.save(X3DxrFileName, X3Dxc)  
- 
-def buildTrain_1():
-
-    # train 1
-    p2 = train1()
-    Xc, X3Dxc ,Yc = GenImagesRe(p2)
-    
-    # save results
-    logger.info("save results")
-    path = "../data/trainData_1/"
-
 
     task = 0
     XFileName = path+"Xc_"+str(task)
@@ -510,8 +451,6 @@ def buildTrain_1():
     np.save(yFileName, Yc)
     np.save(XFileName, Xc)
     np.save(X3DxrFileName, X3Dxc)  
-
-
 
 
        
@@ -521,16 +460,22 @@ def mainMethod(args):
     # Reproducible results:
     np.random.seed(123)
     
-    # test 1:
+    # try
     #p1 = params1()
-    #Xc, X3Dxc ,Yc = GenImagesRe(p1)
+    #Xc, X3Dxc ,Yc = GenImagesRe(p1)   
+    
+    # test 1:    
+    #buildSet("../data/testData_1/", test1())
+    #buildSet("../data/trainData_1/", train1())
     
     # test 2:
-    #p1 = params2()
-    #Xc, X3Dxc ,Yc = GenImagesRe(p1)
-
-    #buildTest_1()
-    buildTrain_1()
+    #buildSet("../data/testData_2/", test2())
+    buildSet("../data/trainData_2/", train2()) 
+    
+    
+    
+    
+    
 
 def defineSpecificProgramOptions():
     """Defines the command line input and output parameters specific to this

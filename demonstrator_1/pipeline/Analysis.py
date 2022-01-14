@@ -8,15 +8,19 @@ import logging as logger
 logger.basicConfig( level=logger.INFO)
 command='python ./Analysis.py'
 
-path = "../data/testData_1/"
+#path = "../data/testData_1/"
+path = "../data/testData_2/"
+
+
 X3D_test, Y_test = pp.load_datasets(path, 0)
 
 # select the target parameters out of vectors of parameters (only Mbh hence index "1")
 X3D_test, Y_test = pp.ParamFilter(X3D_test, Y_test, [1])
 
 # normalize 
-path = "../data/testData_1/"
-yFileName = path+"scale3.npy"
+#yFileName = path+"scale3.npy"
+yFileName = path+"scale2_1.npy"
+
 scale_factors = np.load(yFileName, allow_pickle=True )
 m, ymax = scale_factors
 logger.info("scaling factors for data cube {} and target params {}".format(m, ymax))
@@ -24,7 +28,9 @@ X3test = X3D_test/m
 
 
 # Evaluate model 		_, acc = model.evaluate(X3test, Ytest, verbose=0)
-model = load_model('../models/model_03.hdf5')
+#model = load_model('../models/model_03.hdf5')
+model = load_model('../models/model2_01.hdf5')
+
 Y1new = model.predict(X3test)
 
 # Return to initial scale and save results
