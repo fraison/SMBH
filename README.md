@@ -76,7 +76,6 @@ In ***notebooks***, **"data_inspector.ipynb"** helps to visualize the data cubes
 │   │   ├── data_inspector.ipynb         - helps to visualize the data cubes (projection to (x,y) along velocity axis z).
 │   │   ├── pygme_check_data.npy         - data cube for test by data_generator_test.py from  pygme_check.ipynb
 │   │   ├── pygme_check.ipynb            - short tutorial which explains how to use the package pygme to build a self-consistent model with particles.
-│   │   ├── pygme_check.npy              - TOBEREMOVED 
 │   │   ├── Sersic_firstmodel_check.mge  - for reference: output of PYGME with pygme_check.ipynb
 │   │   └── Sersic_firstmodel_try_0      - for reference: output of PYGME with data_generator.ipynb
 │   ├── pipeline
