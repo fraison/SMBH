@@ -81,12 +81,21 @@ In ***notebooks***, **"data_inspector.ipynb"** helps to visualize the data cubes
 │   │   └── Trainer.py                   - train the CNN with a data set and generate new models.
 │   ├── setup.py
 │   ├── src
-│   │   ├── data_generator.py            - python code to use in order to generate data sets of data cubes. It can be easily parallelized on a cluster as each simulation run is independant from any other.
-│   └── tests
-│       ├── data_generator_test.py       - test of data_generator.py 
+│   │   └── data_generator.py            - python code to use in order to generate data sets of data cubes. It can be easily parallelized on a cluster as each simulation run is independant from any other.
+│   │ 
+│   ├── tests
+│   │   └── data_generator_test.py       - test of data_generator.py 
+│   │  
+│   ├── docs
+│   │   └── _build
+│           └── html
+│               └── index.html
 ├── LICENSE
 └── README.md
 ```
+# Documentation
+
+Open **"index.html"** located in ***docs/_build/html*** with a browser.
 
 # Future Work
 
