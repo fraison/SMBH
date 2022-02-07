@@ -8,7 +8,25 @@ import logging as logger
 logger.basicConfig( level=logger.INFO)
 command='python ./Trainer.py'
 
-def train_1(dataPath, savePath, modelFullName, scaleName):
+
+
+def train_1(dataPath, savePath, modelFullName, scaleName, nb_epoch):
+    """
+        load the full data set for and train a model
+        
+    Parameters
+    ----------
+        dataPath : path to the dataset 
+        savePath : path where to save the scale factor
+        modelFullName : name of the model including path
+        scaleName : name of the file with the scale factor to be stored in savePath
+        nb_epoch : number of epochs to use for training the model
+    
+    Return
+    ------
+        X3D_t : numpy vector of arrays the agglomerated datacubes
+        Y_t: numpy vector of vectors of parameters
+    """
     X3D_train, Y_train = pp.load_datasets(dataPath, 0)
 
     # select the target parameters out of vectors of parameters (only Mbh hence index "1")
@@ -33,8 +51,9 @@ def train_1(dataPath, savePath, modelFullName, scaleName):
     # train model
     #model.fit(prep_trainX, trainY, epochs=5, batch_size=64, verbose=0)
     batch_size = 32
-    h = model.fit(X3train, Ytrain, nb_epoch=30, batch_size=batch_size, verbose=1)
-
+    #h = model.fit(X3train, Ytrain, nb_epoch=30, batch_size=batch_size, verbose=1)
+    h = model.fit(X3train, Ytrain, nb_epoch=nb_epoch, batch_size=batch_size, verbose=1)
+    
     #save model
     model.save(modelFullName)#ok
 
@@ -59,20 +78,33 @@ def mainMethod(args):
     scaleName = "scale3"
     train_1(dataPath, savePath, modelFullName, scaleName)
     """
-    
+    """
     dataPath = "../data/trainData_2/"
     savePath = "../data/testData_2/"
     modelFullName = "../models/model2_01.hdf5"
     scaleName = "scale2_1"
     train_1(dataPath, savePath, modelFullName, scaleName)
+    """
+    """
+    dataPath = "../data/trainData_long_1/"
+    savePath = "../data/testData_1/"
+    modelFullName = "../models/model1_long_01.hdf5"
+    scaleName = "scale1_long_1"
+    train_1(dataPath, savePath, modelFullName, scaleName) #30 epochs
+    """
     
+    dataPath = "../data/trainData_long_1/"
+    savePath = "../data/testData_1/"
+    modelFullName = "../models/model1_long_02.hdf5"
+    scaleName = "scale1_long_2"
+    train_1(dataPath, savePath, modelFullName, scaleName, 40)
 
 def defineSpecificProgramOptions():
     """Defines the command line input and output parameters specific to this
     program.
 
-    Returns
-    -------
+    Return
+    ------
     ArgumentParser
 
     """

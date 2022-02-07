@@ -14,20 +14,23 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import random as rd
 
-def load_datasets(dataPath, fileRangeMax):#fileRangeMax= largest value
-    '''
+
+
+def load_datasets(dataPath, fileRangeMax):
+    """
         load the full data set for testing or training
         
     Parameters
     ----------
         listOfParamIndices : list of indices like [0,1,4] to select params out of 
         [Reff, mb, fct , ax, BEps, alp, par.dist, ga, myMGE.TMGEMass  ]
+        fileRangeMax= largest value
     
-    Returns
+    Return
     ------
         X3D_t : numpy vector of arrays the agglomerated datacubes
         Y_t: numpy vector of vectors of parameters
-    '''
+    """
     for i in range(0, fileRangeMax+1):
         nameX3D = dataPath + "X3Dc_" + str(i) + ".npy"
         nameY = dataPath + "Yc_" + str(i) + ".npy"
@@ -44,7 +47,7 @@ def load_datasets(dataPath, fileRangeMax):#fileRangeMax= largest value
     
     
 def ParamFilter(X3D_train, Y_train, listOfParamIndices):
-    '''
+    """
         select the target parameters out of vectors of parameters
         
     Parameters
@@ -54,12 +57,12 @@ def ParamFilter(X3D_train, Y_train, listOfParamIndices):
         listOfParamIndices : list of indices like [0,1,4] to select params out of 
         [Reff, mb, fct , ax, BEps, alp, par.dist, ga, myMGE.TMGEMass  ]
     
-    Returns
+    Return
     ------
         X3D_train : numpy vector of arrays the agglomerated datacubes for training
         Y_train: numpy vector of vectors of selected parameters for training
 
-    '''
+    """
     
     Y_trainr = Y_train[:, listOfParamIndices].copy()##     
     X3Dtrainr = X3D_train.copy()
@@ -67,20 +70,21 @@ def ParamFilter(X3D_train, Y_train, listOfParamIndices):
     return  X3Dtrainr, Y_trainr
     
     
-#normalization by the max of the distibutionS
+
 def CubeGlobRescale(X3D_train):
-    '''
-        normalize the data cubes
+    """
+        normalize the data cubes by the max of the distibutionS
         
     Parameters
     ----------
         X3D_train : numpy vector of arrays the agglomerated datacubes
     
-    Returns
+    Return
     ------
         X3Dtrain : numpy vector of arrays the agglomerated datacubes normalized for training
         m : global maximum of the data cubes
-    '''
+    """
+    
     print("globRescale")
     m = np.amax(X3D_train) 
     X3Dtrain = np.zeros_like(X3D_train)
@@ -94,7 +98,7 @@ def CubeGlobRescale(X3D_train):
 
 
 def TargetlinearRescaleAll(Y_train):
-    '''
+    """
         rescale the target parameters 
         
     Parameters
@@ -102,13 +106,13 @@ def TargetlinearRescaleAll(Y_train):
         Y_train : numpy vector of vectors of parameters
 
     
-    Returns
+    Return
     ------
         Ytrain : numpy vector of vectors of rescaled parameters
 
         ymax : global maximum of each parameter of the 2 data set (test & train)
         ymin : global minimum of each parameter of the 2 data set (test & train)
-    '''
+    """
     print("TargetlinearRescaleAll")
     Ytrain = np.zeros_like(Y_train)
 
@@ -120,7 +124,7 @@ def TargetlinearRescaleAll(Y_train):
     
     
 def TargetlinearDescaleAll (Y1new, ymax, ymin):
-    '''
+    """
         rescale the target parameters to the initial values
         
     Parameters
@@ -129,11 +133,11 @@ def TargetlinearDescaleAll (Y1new, ymax, ymin):
         ymax : global maximum of each parameter of the 2 data set (test & train)
         ymin : global minimum of each parameter of the 2 data set (test & train)
             
-    Returns
+    Return
     ------
         Ytest_denorm : numpy vector of vectors of rescaled parameters
 
-    '''
+    """
     print("TargetlinearDescaleAll")
     Y1new_denorm = Y1new.copy() *  ymax    
 

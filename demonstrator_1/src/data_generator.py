@@ -34,9 +34,9 @@ def funSamplingOriginal(R):
     ----------
         R : radius[pc]
     
-    Returns
+    Return
     ------
-    : numpy vector
+    numpy vector
 
     """
     return np.logspace(0., 4., 1001)
@@ -49,9 +49,9 @@ def funSampling(R):
     ----------
         R : radius[pc]
         
-    Returns
+    Return
     ------
-    : numpy vector
+    numpy vector
 
     """
     return np.logspace(np.log10(R/100.), np.log10(R*10), 1001)
@@ -60,13 +60,13 @@ def funSampling(R):
 
 def GenImagesRe(par):
     """
-    Function generating the dataset from parameter sets
+        Function generating the dataset from parameter sets
     
     Parameters
     ----------
     par: class with the parameters of the simulation
         
-    Returns
+    Return
     ------
     :    dataset as vector of matrices, vector of data cubes and vector of target parameters,  
     X, X3Dxr ,Y
@@ -227,7 +227,7 @@ def GenImagesRe(par):
 class params1():   
     def __init__(self):
         """    
-        Function generating the dataset from parameter sets
+           A parameter set with standard values
        
         """        
         # HARD PARAMETERS (set for one data set)
@@ -291,7 +291,7 @@ class params1():
 class train1(params1):   
     def __init__(self):
         """    
-        Function generating the dataset from parameter sets
+           additional parameters for the training set
 
         """
         params1.__init__(self)        
@@ -312,7 +312,7 @@ class train1(params1):
 class test1(params1):   
     def __init__(self):
         """    
-        Function generating the dataset from parameter sets
+           additional parameters for the testing set
 
         """
         params1.__init__(self)
@@ -330,15 +330,101 @@ class test1(params1):
 
           
 
+# test 1: compare old settings with example
+class params1Long():   
+    def __init__(self):
+        """    
+           A parameter set with standard values for a large data set
+       
+        """       
+        # HARD PARAMETERS (set for one data set)
+        self.nstars = 10000 #number of stars in each galaxy; 1M would be ideal
+
+        ## Number of points in the Velocity direction
+        self.nv = 101
+
+        self.maxV = 1000. #in [km/s], maximum velocity for the LOSVDs
+    
+        ## Number of point in the X and Y direction (the total number will be nXY * nXY)
+        ## You can also specify a tupple for different numbers in X and Y    
+        self.nXY = 101    
+        
+        #number of values along axes perpendicular to LOS
+        self.imageSize= 20 #
+       
+        #number of values along velocity axis
+        self.imageDepth= self.nv - 1
+
+        # constant to dimensionate MBH ; Mgal ~ delta * Re**2 (@luminosity =100)
+        self.delta = 896.7 
+
+        # SOFT PARAMETERS (explore the parameter space in each data set)    
+        #  Effective radius of Sersic profile in [pc]
+        self.Re = np.array([ 1500.])
+   
+        # distance of the galaxy in [Mpc]
+        self.dist = 10 #Mpc
+
+        # Let's add some axis ratio - here let's decide it is b/a= 0.55 (ellipticity is 1-b/a = 0.45)
+        # axis_ratio : b/a where b is the small axis along z and a in the plan xy perpendicular to z (z = symmetry axis)
+        self.axis_ratio = np.array([0.8])
+   
+        # parameter relating Sersic parameter beta to ellipticity beta = epsilon * FBEps
+        self.FBEps = np.array([0.6]) 
+
+        # angle of rotation of the system to perform data augmentation without increasing CPU time significantly
+        self.alpha = np.array([0.])
+
+        # radius inside which LOSVD is calculated [pc]
+        self.scaleR = 5000.0
+        
+        # here we do 1 check: use only a single vector of parameters 
+        # [0-100] Galaxy mass = factor_luminosity * galaxy luminosity
+        self.factor_luminosity = np.array([100.])
+     
+        # task is just a convenient index to distribute parameters to each process running on a specific node
+        task = 0 #only 1 process in use here
+     
+        # factor relating the black hole mass and the total galaxy mass
+        self.gamma = np.array([0.,0.2])[int(task):int(task)+1] #1 value here     
+        
+        # function used to sample the galxy radius [pc]
+        self.fun = funSamplingOriginal
+  
+  
+  
+
+# test 1: compare old settings with example
+class train1Long(params1Long):   
+    def __init__(self):
+        """    
+           additional parameters for the training set
+
+        """
+        params1Long.__init__(self)        
+        
+        # HARD PARAMETERS (set for one data set)
+
+        # constant to dimensionate MBH ; Mgal ~ delta * Re**2 (@luminosity =100)
+        self.delta = 12.98
+        
+
+        # SOFT PARAMETERS (explore the parameter space in each data set)    
+             
+        # factor relating the black hole mass and the total galaxy mass
+        #self.gamma = np.array([0.,0.2])[int(task):int(task)+1] #1 value here   
+        self.gamma = np.linspace(0,10,1000)/100. # 10 % of galaxy mass at max
+  
+
   
  
 # test2: check if realistic parameters can train a network            
 class params2():   
     def __init__(self):
         """    
-        Function generating the dataset from parameter sets
-       
-        """        
+           A parameter set with values for far objects
+        """
+              
         # HARD PARAMETERS (set for one data set)
         self.nstars = 10000 #number of stars in each galaxy; 1M would be ideal
 
@@ -398,7 +484,7 @@ class params2():
 class train2(params2):   
     def __init__(self):
         """    
-        Function generating the dataset from parameter sets
+           additional parameters for the training set
 
         """
         params2.__init__(self)
@@ -419,9 +505,9 @@ class train2(params2):
 class test2(params2):   
     def __init__(self):
         """    
-        Function generating the dataset from parameter sets
+           additional parameters for the testing set
 
-        """        
+        """
         params2.__init__(self)
         
         # HARD PARAMETERS (set for one data set)
@@ -437,6 +523,10 @@ class test2(params2):
         
 
 def buildSet(path , paramType):
+    """    
+        Function generating the dataset from parameter sets
+
+    """    
 
     Xc, X3Dxc ,Yc = GenImagesRe(paramType)
     
@@ -470,18 +560,19 @@ def mainMethod(args):
     
     # test 2:
     #buildSet("../data/testData_2/", test2())
-    buildSet("../data/trainData_2/", train2()) 
+    #buildSet("../data/trainData_2/", train2()) 
     
-    
+    # test 1 long:    
+    buildSet("../data/trainData_long_1/", train1Long())
     
     
     
 
 def defineSpecificProgramOptions():
-    """Defines the command line input and output parameters specific to this
-    program.
+    """
+        Defines the command line input and output parameters specific to this program.
 
-    Returns
+    Return
     -------
     ArgumentParser
 
